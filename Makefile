@@ -1,10 +1,5 @@
-# Author: Radim Daniel Pánek <rdpanek@gmail.com>
-#
-# make build  - build new image from Dockerfile
-
-
-NAME=rdpanek/jmeter
-VERSION=2.13
+NAME=devtransition/jmeter-remote-sshd
+VERSION=2.13-1.3.1
 PARAM=$(filter-out $@,$(MAKECMDGOALS))
 
 
@@ -14,16 +9,11 @@ default:
 build:
 	docker build -t $(NAME):$(VERSION) .
 
+build-clean:
+	docker build -t $(NAME):$(VERSION) --force-rm --no-cache .
+
 run:
-	docker run --rm $(NAME):$(VERSION) /srv/var/jmeter/apache-jmeter-$(VERSION)/bin/jmeter $(PARAM)
-
-server:
-	docker run --rm $(NAME):$(VERSION) /srv/var/jmeter/apache-jmeter-$(VERSION)/bin/jmeter -s $(PARAM)
-
-test:
-	rm -rf *.jtl *.log && \
-	docker run --rm -v `pwd`:/mnt/test $(NAME):$(VERSION) /srv/var/jmeter/apache-jmeter-$(VERSION)/bin/jmeter -n -t /mnt/test/$(PARAM) -l /mnt/test/$(PARAM).jtl -j /mnt/test/$(PARAM).log
-
+	docker run --rm $(NAME):$(VERSION) $(PARAM)
 
 tag:
 	git tag -d $(VERSION) 2>&1 > /dev/null
