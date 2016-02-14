@@ -15,6 +15,19 @@
 
 ## Run local jmeter controller
 
+### Configuration
+
+Add these value to your local jmeter.properties file:
+
+  `remote_hosts=127.0.0.1:55501`
+  
+  `client.rmi.localport=55512`
+  
+  `server.rmi.localport=60000`
+  
+
+### Start
+
   `jmeter.sh -Djava.rmi.server.hostname=127.0.0.1`
   `ssh -L 55501:127.0.0.1:55501 -L 55511:127.0.0.1:55511 -R 55512:127.0.0.1:55512 -p 60000 root@52.29.50.70`
 
