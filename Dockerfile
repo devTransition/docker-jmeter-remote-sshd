@@ -1,5 +1,5 @@
 # A image with apache-jmeter-2.13
-# For more information; https://github.com/devTransition/docker-jmeter-remote-sshd
+# For more information: https://github.com/devTransition/docker-jmeter-remote-sshd
 
 # use ubuntu 14.04 as base
 FROM ubuntu:trusty
@@ -83,4 +83,4 @@ ADD run-services.sh /
 RUN chmod a+x /run-services.sh
 
 EXPOSE 22
-CMD ["./run-services.sh"]
+CMD ["/run-services.sh"]
