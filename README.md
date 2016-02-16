@@ -28,8 +28,9 @@ Add these value to your local jmeter.properties file:
 
 ### Start
 
-  `jmeter.sh -Djava.rmi.server.hostname=127.0.0.1`
-  `ssh -L 55501:127.0.0.1:55501 -L 55511:127.0.0.1:55511 -R 55512:127.0.0.1:55512 -p 60000 root@52.29.50.70`
+  `ssh -L 55501:127.0.0.1:55501 -L 55511:127.0.0.1:55511 -R 55512:127.0.0.1:55512 -p 60000 root@<remote ip>
+
+  `jmeter -Djava.rmi.server.hostname=127.0.0.1`
 
 
 ### Build
