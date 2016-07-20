@@ -1,13 +1,13 @@
-# A image with apache-jmeter-2.13
+# A image with apache-jmeter and plugins (latest version)
 # For more information: https://github.com/devTransition/docker-jmeter-remote-sshd
 
-# use ubuntu 14.04 as base
-FROM ubuntu:trusty
+# use ubuntu 16.04 as base
+FROM ubuntu:xenial
 MAINTAINER Nicolas Wild <nwild79@gmail.com>
 
 ### env ###
-ENV JMETER_VERSION 2.13
-ENV PLUGINS_VERSION 1.3.1
+ENV JMETER_VERSION 3.0
+ENV PLUGINS_VERSION 1.4.0
 ENV JMETER_PATH /srv/var/jmeter
 ENV PLUGINS_PATH $JMETER_PATH/plugins
 
@@ -18,15 +18,16 @@ ENV HOME /root
 # enable universe
 RUN sed 's/main$/main universe/' -i /etc/apt/sources.list \
     && apt-get update \
-    && apt-get install -y --force-yes software-properties-common \
-    && apt-get install -y --force-yes unzip \
-    && apt-get install -y --force-yes pwgen
+    && apt-get -y upgrade \
+    && apt-get -y install software-properties-common \
+    && apt-get -y install unzip \
+    && apt-get -y install pwgen
 
 
 ### Install SSHD ###
 
-RUN apt-get install -y --force-yes openssh-server \
-    && apt-get install -y --force-yes pwgen \
+RUN apt-get install -y openssh-server \
+    && apt-get install -y pwgen \
     && mkdir /var/run/sshd \
     && mkdir /root/.ssh
 
@@ -44,22 +45,23 @@ RUN echo "export VISIBLE=now" >> /etc/profile
 RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
 RUN add-apt-repository ppa:webupd8team/java \
     && apt-get update \
-    && apt-get install -y --force-yes oracle-java8-installer
+    && apt-get install -y oracle-java8-installer
 
 RUN mkdir -p $JMETER_PATH \
-    && cd $JMETER_PATH \
-    && wget http://www.eu.apache.org/dist//jmeter/binaries/apache-jmeter-$JMETER_VERSION.tgz \
-    && tar -zxf apache-jmeter-$JMETER_VERSION.tgz \
+    && wget -q http://www.eu.apache.org/dist/jmeter/binaries/apache-jmeter-$JMETER_VERSION.tgz
+
+RUN tar -zxf apache-jmeter-$JMETER_VERSION.tgz --strip-components=1 -C $JMETER_PATH \
     && rm apache-jmeter-$JMETER_VERSION.tgz
 
-# Install dependencies
-# - JMeterPlugins-Standard 1.2.0
-# - JMeterPlugins-Extras 1.2.0
-# - JMeterPlugins-ExtrasLibs 1.2.0
+# Install plugins
+# - JMeterPlugins-Standard
+# - JMeterPlugins-Extras
+# - JMeterPlugins-ExtrasLibs
 
-# Install JMeterPlugins-ExtrasLibs
 RUN mkdir -p $PLUGINS_PATH \
     && wget -q http://jmeter-plugins.org/downloads/file/JMeterPlugins-ExtrasLibs-$PLUGINS_VERSION.zip \
+    && ls -la \
+    && ls -la $PLUGINS_PATH \
     && unzip -o -d $PLUGINS_PATH JMeterPlugins-ExtrasLibs-$PLUGINS_VERSION.zip \
     && wget -q http://jmeter-plugins.org/downloads/file/JMeterPlugins-Extras-$PLUGINS_VERSION.zip \
     && unzip -o -d $PLUGINS_PATH JMeterPlugins-Extras-$PLUGINS_VERSION.zip \
@@ -68,8 +70,8 @@ RUN mkdir -p $PLUGINS_PATH \
     && rm *.zip
 
 # Copy plugins to jmeter and cleanup
-RUN cp $PLUGINS_PATH/lib/*.jar $JMETER_PATH/apache-jmeter-$JMETER_VERSION/lib/ \
-    && cp $PLUGINS_PATH/lib/ext/*.jar $JMETER_PATH/apache-jmeter-$JMETER_VERSION/lib/ext/ \
+RUN cp $PLUGINS_PATH/lib/*.jar $JMETER_PATH/lib/ \
+    && cp $PLUGINS_PATH/lib/ext/*.jar $JMETER_PATH/lib/ext/ \
     && rm -rf $PLUGINS_PATH
 
 # Clean up when done

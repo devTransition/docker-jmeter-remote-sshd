@@ -1,5 +1,5 @@
 NAME=devtransition/jmeter-remote-sshd
-VERSION=2.13-1.3.1
+VERSION=3.0-1.4.0
 PARAM=$(filter-out $@,$(MAKECMDGOALS))
 
 
