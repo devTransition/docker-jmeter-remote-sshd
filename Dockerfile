@@ -48,14 +48,14 @@ RUN add-apt-repository ppa:webupd8team/java \
 
 RUN mkdir -p $JMETER_PATH \
     && cd $JMETER_PATH \
-    && wget http://www.eu.apache.org/dist//jmeter/binaries/apache-jmeter-$JMETER_VERSION.tgz \
+    && wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-$JMETER_VERSION.tgz \
     && tar -zxf apache-jmeter-$JMETER_VERSION.tgz \
     && rm apache-jmeter-$JMETER_VERSION.tgz
 
 # Install dependencies
-# - JMeterPlugins-Standard 1.2.0
-# - JMeterPlugins-Extras 1.2.0
-# - JMeterPlugins-ExtrasLibs 1.2.0
+# - JMeterPlugins-Standard
+# - JMeterPlugins-Extras
+# - JMeterPlugins-ExtrasLibs
 
 # Install JMeterPlugins-ExtrasLibs
 RUN mkdir -p $PLUGINS_PATH \

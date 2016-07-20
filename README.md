@@ -1,4 +1,4 @@
-# Docker JMeter 2.13 with plugins 1.3.1 for server/remote use (and communication via ssh tunnel)
+# Docker Apache JMeter 2.13 with latest plugins for server/remote use (and communication via ssh tunnel)
 
 ## Contains
 
@@ -6,12 +6,17 @@
 * JMeterPlugins-Standard 1.3.1
 * JMeterPlugins-Extras 1.3.1
 * JMeterPlugins-ExtrasLibs 1.3.1
+* Oracle Java 8
 * user.properties
 
 
 ## Run server
 
   `docker run --rm -p 60000:22 -ti -e SSH="<public SSH key for login>" devtransition/jmeter-remote-sshd`
+  
+  or
+  
+  `make run -e SSH="<public SSH key for login>" -p 60000:22`
 
 ## Run local jmeter controller
 
@@ -28,11 +33,17 @@ Add these value to your local jmeter.properties file:
 
 ### Start
 
-  `jmeter.sh -Djava.rmi.server.hostname=127.0.0.1`
-  `ssh -L 55501:127.0.0.1:55501 -L 55511:127.0.0.1:55511 -R 55512:127.0.0.1:55512 -p 60000 root@52.29.50.70`
+  `ssh -L 55501:127.0.0.1:55501 -L 55511:127.0.0.1:55511 -R 55512:127.0.0.1:55512 -p 60000 root@<remote ip>
+
+  `jmeter -Djava.rmi.server.hostname=127.0.0.1`
 
 
 ### Build
   `git clone https://github.com/devtransition/docker-jmeter-server-sshd`
 
   `make build`
+  
+  
+## Copyright and license
+
+Code copyright 2016 Nicolas Wild. Code released under [the MIT license](LICENSE).
